@@ -74,9 +74,9 @@ mvn spring-boot:run
 
 ## 👥 Integrantes
 
-Tiago Alcázar
-Brahim González
-Francis Chávez
-Diego Villagrán
-Belén Almendros
-Héctor Chacón
+- Tiago Alcázar
+- Brahim González
+- Francis Chávez
+- Diego Villagrán
+- Belén Almendros
+- Héctor Chacón
