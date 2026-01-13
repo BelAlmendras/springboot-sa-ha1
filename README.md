@@ -40,7 +40,7 @@ El sistema considera las siguientes entidades principales:
 
 ## 🖼️ Diagrama de la base de datos
 
-![Diagrama ER](https://postimg.cc/MXB3911s)
+[![neondb-diagram.png](https://i.postimg.cc/sfHFDcxR/neondb-diagram.png)](https://postimg.cc/MXB3911s)
 
 ---
 
