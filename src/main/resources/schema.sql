@@ -7,8 +7,8 @@ CREATE TABLE IF NOT EXISTS customers (
     );
 
 CREATE TABLE IF NOT EXISTS addresses (
-                                         id_address SERIAL PRIMARY KEY,
-                                         address VARCHAR(50) NOT NULL,
+     id_address SERIAL PRIMARY KEY,
+     address VARCHAR(50) NOT NULL,
     city VARCHAR(20) NOT NULL,
     region VARCHAR(20) NOT NULL,
     zip_code INTEGER,
