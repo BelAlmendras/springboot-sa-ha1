@@ -5,3 +5,9 @@ spring:
     name: springboot-sa-ha1
   profiles:
     active: local # se puede cambiar a "dev", "prod" o "test" si es necesario
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql: TRACE

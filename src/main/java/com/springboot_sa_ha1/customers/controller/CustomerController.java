@@ -14,10 +14,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/customers")   //Se define la ruta base del controlador
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class CustomerController {
-    @Autowired
+
     private final CustomerService customerService;
+
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
+    }
 
     @GetMapping
     public ResponseEntity<List<CustomerResponse>> listar() {
@@ -29,7 +33,7 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.obtenerPorId(id));
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<CustomerResponse> crear(@Valid @RequestBody CustomerRequest request){
         return ResponseEntity.ok(customerService.guardar(request));
     }
