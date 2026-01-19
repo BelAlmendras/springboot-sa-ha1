@@ -4,7 +4,7 @@ spring:
   application:
     name: springboot-sa-ha1
   profiles:
-    active: local # se puede cambiar a "dev", "prod" o "test" si es necesario
+    active: prod # se puede cambiar a "dev", "prod" o "test" si es necesario
 
 logging:
   level:
