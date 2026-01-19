@@ -1,14 +1,14 @@
 CREATE TABLE IF NOT EXISTS customers (
-     id_customer SERIAL PRIMARY KEY,
-     customer_name VARCHAR(50) NOT NULL,
+    id_customer SERIAL PRIMARY KEY,
+    customer_name VARCHAR(50) NOT NULL,
     email VARCHAR(50) NOT NULL,
     phone VARCHAR(12),
     password VARCHAR(16) NOT NULL
     );
 
 CREATE TABLE IF NOT EXISTS addresses (
-     id_address SERIAL PRIMARY KEY,
-     address VARCHAR(50) NOT NULL,
+    id_address SERIAL PRIMARY KEY,
+    address VARCHAR(50) NOT NULL,
     city VARCHAR(20) NOT NULL,
     region VARCHAR(20) NOT NULL,
     zip_code INTEGER,
@@ -23,8 +23,8 @@ CREATE UNIQUE INDEX IF NOT EXISTS ux_address_customer
     ON addresses (id_customer);
 
 CREATE TABLE IF NOT EXISTS categories (
-                                          id_category SERIAL PRIMARY KEY,
-                                          category_name VARCHAR(30) NOT NULL,
+    id_category SERIAL PRIMARY KEY,
+    category_name VARCHAR(30) NOT NULL,
     description VARCHAR(50) NOT NULL
     );
 
@@ -42,10 +42,10 @@ CREATE TABLE IF NOT EXISTS products (
     );
 
 CREATE TABLE IF NOT EXISTS orders (
-  id_order SERIAL PRIMARY KEY,
-  quantity INTEGER NOT NULL,
-  order_date DATE NOT NULL,
-  total NUMERIC(10,2) NOT NULL,
+    id_order SERIAL PRIMARY KEY,
+    quantity INTEGER NOT NULL,
+    order_date DATE NOT NULL,
+    total NUMERIC(10,2) NOT NULL,
     id_product INTEGER NOT NULL,
     id_customer INTEGER NOT NULL,
     CONSTRAINT fk_order_product
@@ -57,16 +57,16 @@ CREATE TABLE IF NOT EXISTS orders (
     );
 
 CREATE TABLE IF NOT EXISTS collections (
-                                           id_collection SERIAL PRIMARY KEY,
-                                           collection_name VARCHAR(50) NOT NULL,
+    id_collection SERIAL PRIMARY KEY,
+    collection_name VARCHAR(50) NOT NULL,
     description VARCHAR(100)
     );
 
 CREATE TABLE IF NOT EXISTS product_collections (
-                                                   id_product INTEGER NOT NULL,
-                                                   id_collection INTEGER NOT NULL,
-                                                   CONSTRAINT pk_product_collection
-                                                   PRIMARY KEY (id_product, id_collection),
+    id_product INTEGER NOT NULL,
+    id_collection INTEGER NOT NULL,
+    CONSTRAINT pk_product_collection
+    PRIMARY KEY (id_product, id_collection),
     CONSTRAINT fk_pc_product
     FOREIGN KEY (id_product)
     REFERENCES products (id_product),
