@@ -41,6 +41,7 @@ public class CustomerServiceImp implements CustomerService {
         Customer customer = new Customer();
         customer.setName(request.name());
         customer.setEmail(request.email());
+        customer.setPhone(request.phone());
         customer.setPassword(request.password());
         return mapper.toResponse(repository.save(customer));
     }

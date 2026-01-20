@@ -8,10 +8,8 @@ public class OrderMapper {
   public OrderResponse toResponse(Order order) {
     return new OrderResponse(
         order.getId(),
-        order.getQuantity(),
         order.getOrderDate(),
         order.getTotal(),
-        order.getProductId(),
         order.getCustomerId()
     );
   }

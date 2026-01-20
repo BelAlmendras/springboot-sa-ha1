@@ -8,16 +8,13 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "pedidos")
 @Getter
 @Setter
 public class Order {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
-
-  @NotNull
-  private Long quantity;
 
   @NotNull
   @Column(name = "order_date", nullable = false)
@@ -27,11 +24,7 @@ public class Order {
   private Long total;
 
   @NotNull
-  @Column(name = "id_product")
-  private Integer productId;
-
-  @NotNull
-  @Column(name = "id_costumer")
+  @Column(name = "id_customer")
   private Integer customerId;
 }
 

@@ -39,10 +39,8 @@ public class OrderServiceImp implements OrderService {
   @Override
   public OrderResponse guardar(OrderRequest request){
     Order order = new Order();
-    order.setQuantity(request.quantity());
     order.setOrderDate(request.orderDate());
     order.setTotal(request.total());
-    order.setProductId(request.productId());
     order.setCustomerId(request.customerId());
     return mapper.toResponse(repository.save(order));
   }
@@ -51,10 +49,8 @@ public class OrderServiceImp implements OrderService {
   public OrderResponse actualizar(Long id, OrderRequest request){
     Order order = repository.findById(id)
         .orElseThrow(() -> new RuntimeException("Orden no encontrada"));
-    order.setQuantity(request.quantity());
     order.setOrderDate(request.orderDate());
     order.setTotal(request.total());
-    order.setProductId(request.productId());
     order.setCustomerId(request.customerId());
     return mapper.toResponse(repository.save(order));
   }

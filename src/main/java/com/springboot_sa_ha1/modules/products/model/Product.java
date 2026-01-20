@@ -1,10 +1,14 @@
 package com.springboot_sa_ha1.modules.products.model;
 
 
+import com.springboot_sa_ha1.modules.order_product.model.OrderProduct;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "productos")
@@ -28,6 +32,8 @@ public class Product {
 
   private Long id_category;
 
+  @OneToMany(mappedBy = "product")
+  private Set<OrderProduct> orderProducts = new HashSet<>();
 }
 
 

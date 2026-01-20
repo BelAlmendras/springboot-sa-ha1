@@ -13,6 +13,7 @@ import lombok.Setter;
 public class Customer {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id_customer")
   private Long id;
 
   @NotBlank
@@ -28,6 +29,3 @@ public class Customer {
   private String password;
 
 }
-
-
-
