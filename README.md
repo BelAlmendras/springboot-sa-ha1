@@ -40,7 +40,7 @@ El sistema considera las siguientes entidades principales:
 
 ## 🖼️ Diagrama de la base de datos
 
-[![neondb-diagram.png](https://i.postimg.cc/sfHFDcxR/neondb-diagram.png)](https://postimg.cc/MXB3911s)
+[![temporal-pi-public.png](https://i.postimg.cc/qvVhqCQk/temporal-pi-public.png)](https://postimg.cc/zV7XPv9M)
 
 ---
 
