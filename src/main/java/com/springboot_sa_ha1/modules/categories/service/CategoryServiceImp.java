@@ -39,9 +39,15 @@ public class CategoryServiceImp implements CategoryService {
 
   @Override
   public CategoryResponse guardar(CategoryRequest request){
+    // Generar slug automáticamente
+    String normalizedSlug = request.category_name()
+        .trim()
+        .toLowerCase()
+        .replace(" ", "_");
     Category category = new Category();
     category.setCategory_name(request.category_name());
     category.setDescription(request.description());
+    category.setSlug(normalizedSlug);
     return mapper.toResponse(repository.save(category));
   }
 

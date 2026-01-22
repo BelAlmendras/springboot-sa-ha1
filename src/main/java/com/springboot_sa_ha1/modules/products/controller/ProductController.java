@@ -2,12 +2,14 @@ package com.springboot_sa_ha1.modules.products.controller;
 
 import com.springboot_sa_ha1.modules.products.dto.ProductRequest;
 import com.springboot_sa_ha1.modules.products.dto.ProductResponse;
+import com.springboot_sa_ha1.modules.products.model.Product;
 import com.springboot_sa_ha1.modules.products.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/product")
@@ -18,6 +20,11 @@ public class ProductController {
 
   public ProductController(ProductService productService) {
     this.productService = productService;
+  }
+
+  @GetMapping("/search")
+  public ResponseEntity<List<ProductResponse>> searchProducts(@RequestParam String term) {
+    return ResponseEntity.ok(productService.searchByTerm(term));
   }
 
   @GetMapping

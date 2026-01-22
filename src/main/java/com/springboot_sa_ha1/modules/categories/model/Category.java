@@ -21,4 +21,6 @@ public class Category {
   @NotBlank
   private String description;
 
+  private String slug;
+
 }

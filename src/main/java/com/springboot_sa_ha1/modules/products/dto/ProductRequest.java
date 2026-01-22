@@ -5,5 +5,6 @@ public record ProductRequest(
     Long price,
     Long stock,
     String description,
+    String imageUrl,
     Long id_category
 ) {}

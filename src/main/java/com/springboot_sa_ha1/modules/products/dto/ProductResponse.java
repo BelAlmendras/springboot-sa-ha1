@@ -6,5 +6,6 @@ public record ProductResponse(
     Long price,
     Long stock,
     String description,
+    String imageUrl,
     Long id_category
 ) {}

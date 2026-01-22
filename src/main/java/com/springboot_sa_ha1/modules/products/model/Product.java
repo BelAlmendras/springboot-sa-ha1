@@ -31,6 +31,8 @@ public class Product {
   @NotBlank
   private String description;
 
+  private String imageUrl;
+
   private Long id_category;
 
   @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)

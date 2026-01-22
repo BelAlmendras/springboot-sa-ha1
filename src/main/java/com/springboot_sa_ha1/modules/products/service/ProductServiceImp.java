@@ -23,6 +23,13 @@ public class ProductServiceImp implements ProductService {
   }
 
   @Override
+  public List<ProductResponse> searchByTerm(String term) {
+    return repository.searchByTerm(term).stream()
+        .map(mapper::toResponse)
+        .collect(Collectors.toList());
+  }
+
+  @Override
   public List<ProductResponse> listarTodos() {
     return repository.findAll().stream()
         .map(mapper::toResponse)
@@ -43,6 +50,7 @@ public class ProductServiceImp implements ProductService {
     Product.setPrice(request.price());
     Product.setStock(request.stock());
     Product.setDescription(request.description());
+    Product.setImageUrl(request.imageUrl());
     Product.setId_category(request.id_category());
     return mapper.toResponse(repository.save(Product));
   }
