@@ -30,8 +30,8 @@ public class AddressController {
         return ResponseEntity.ok(addressService.obtenerPorId(id));
     }
 
-    @GetMapping("/customer/{idCustomer}")
-    public ResponseEntity<AddressResponse> obtenerPorIdCustomer(@PathVariable Long id) {
+    @GetMapping("/customer/{id}")
+    public ResponseEntity<AddressResponse> obtenerPorIdCustomer(@PathVariable("id") Long id) {
         return ResponseEntity.ok(addressService.obtenerPorIdCustomer(id));
     }
 
