@@ -30,7 +30,7 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.obtenerPorId(id));
     }
 
-    @GetMapping("/{email:.+}")
+    @GetMapping("/email/{email:.+}")
     public ResponseEntity<CustomerResponse> obtenerPorEmail(@PathVariable String email) {
         CustomerResponse customer = customerService.obtenerPorEmail(email);
         if (customer == null) {

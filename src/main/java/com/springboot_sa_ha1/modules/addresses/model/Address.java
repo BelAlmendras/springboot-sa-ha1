@@ -15,19 +15,15 @@ public class Address {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id_address;
 
-  @NotBlank
   private String address;
 
-  @NotBlank
   private String city;
 
-  @NotBlank
   private String region;
 
   private Integer zip_code;
 
   private Long id_customer;
-
 }
 
 

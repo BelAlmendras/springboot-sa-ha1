@@ -30,6 +30,11 @@ public class AddressController {
         return ResponseEntity.ok(addressService.obtenerPorId(id));
     }
 
+    @GetMapping("/customer/{idCustomer}")
+    public ResponseEntity<AddressResponse> obtenerPorIdCustomer(@PathVariable Long id) {
+        return ResponseEntity.ok(addressService.obtenerPorIdCustomer(id));
+    }
+
     @PostMapping("/create")
     public ResponseEntity<AddressResponse> crear(@Valid @RequestBody AddressRequest request) {
         return ResponseEntity.ok(addressService.guardar(request));

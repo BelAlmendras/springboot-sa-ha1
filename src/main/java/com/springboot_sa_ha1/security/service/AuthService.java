@@ -33,7 +33,7 @@ public class AuthService {
                 .orElseThrow(() -> new UsernameNotFoundException("Customer no encontrado"));
 
         String jwt = jwtService.generateToken(u.getEmail());
-        return new AuthResponse(u.getName(), u.getEmail(), u.getRol(), jwt);
+        return new AuthResponse(u.getId(), u.getName(), u.getEmail(), u.getRol(), jwt);
     }
 
     public AuthResponse register(RegisterRequest r) {
@@ -41,6 +41,7 @@ public class AuthService {
             throw new BadRequestException("El email ya está registrado");
         }
         Customer nuevo = Customer.builder()
+                .id(r.id())
                 .name(r.name())
                 .email(r.email())
                 .passwordHash(passwordEncoder.encode(r.password()))
@@ -52,6 +53,6 @@ public class AuthService {
         customersRepository.save(nuevo);
 
         String jwt = jwtService.generateToken(nuevo.getEmail());
-        return new AuthResponse(nuevo.getName(), nuevo.getEmail(), nuevo.getRol(), jwt);
+        return new AuthResponse(nuevo.getId(), nuevo.getName(), nuevo.getEmail(), nuevo.getRol(), jwt);
     }
 }

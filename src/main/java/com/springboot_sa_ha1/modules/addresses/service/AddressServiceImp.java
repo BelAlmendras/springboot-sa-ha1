@@ -37,6 +37,13 @@ public class AddressServiceImp implements AddressService {
     }
 
     @Override
+    public AddressResponse obtenerPorIdCustomer(Long id) {
+        return repository.findByIdCustomer(id)
+            .map(mapper::toResponse)
+            .orElseThrow(() -> new RuntimeException("Dirección no encontrada para el cliente"));
+    }
+
+    @Override
     public AddressResponse guardar(AddressRequest request){
         Address address = new Address();
         address.setAddress(request.address());
