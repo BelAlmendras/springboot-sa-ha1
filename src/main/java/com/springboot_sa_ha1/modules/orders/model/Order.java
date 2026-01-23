@@ -29,6 +29,7 @@ public class Order {
   @NotNull
   @Column(name = "id_customer")
   private Integer customerId;
+
   @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
   private Set<OrderProduct> orderProducts = new HashSet<>();
 

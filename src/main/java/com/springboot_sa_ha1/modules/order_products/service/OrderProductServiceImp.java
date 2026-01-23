@@ -17,65 +17,118 @@ import java.util.stream.Collectors;
 
 @Service
 public class OrderProductServiceImp implements OrderProductService {
-  //private final OrderProductRepository orderProductRepository;
 
   private final OrderProductRepository repository;
   private final OrderProductMapper mapper;
-  private final ProductRepository productRepository;    // ← NUEVO
+  private final ProductRepository productRepository;
   private final OrderRepository orderRepository;
 
-  public OrderProductServiceImp(OrderProductRepository repository, ProductRepository productRepository, OrderRepository orderRepository, OrderProductMapper mapper) {
+  public OrderProductServiceImp(
+      OrderProductRepository repository,
+      ProductRepository productRepository,
+      OrderRepository orderRepository,
+      OrderProductMapper mapper
+  ) {
     this.repository = repository;
     this.mapper = mapper;
+    this.productRepository = productRepository;
     this.orderRepository = orderRepository;
-    this.productRepository= productRepository;
   }
 
   @Override
-  public List<OrderProductResponse> listarTodos(){
-    return repository.findAll().stream()
+  public List<OrderProductResponse> listarTodos() {
+    return repository.findAll()
+        .stream()
         .map(mapper::toResponse)
-        .collect(Collectors.toList());
+        .toList();
   }
 
   @Override
-  public OrderProductResponse obtenerPorId(OrderProductId id){
+  public OrderProductResponse obtenerPorId(
+      Long orderId,
+      Long productId
+  ) {
+    OrderProductId id =
+        new OrderProductId(productId, orderId);
+
     return repository.findById(id)
         .map(mapper::toResponse)
-        .orElseThrow(() -> new RuntimeException("Dirección no encontrado"));
+        .orElseThrow(() ->
+            new RuntimeException("Order-Product no encontrado")
+        );
   }
 
   @Override
-  public OrderProductResponse guardar(OrderProductRequest request){
+  public OrderProductResponse guardar(
+      OrderProductRequest request
+  ) {
+
+    OrderProductId id =
+        new OrderProductId(
+            request.productId(),
+            request.orderId()
+        );
+
+    if (repository.existsById(id)) {
+      throw new RuntimeException("El producto ya está asociado a la orden");
+    }
 
     Order order = orderRepository.findById(request.orderId())
-        .orElseThrow(() -> new RuntimeException("Order no existe"));
+        .orElseThrow(() ->
+            new RuntimeException("Order no existe")
+        );
 
     Product product = productRepository.findById(request.productId())
-        .orElseThrow(() -> new RuntimeException("Product no existe"));
+        .orElseThrow(() ->
+            new RuntimeException("Product no existe")
+        );
 
-    OrderProductId id = new OrderProductId(request.productId(), request.orderId());
     OrderProduct orderProduct = new OrderProduct();
     orderProduct.setId(id);
-    orderProduct.setOrder(order);      // 🔑
-    orderProduct.setProduct(product);  // 🔑
+    orderProduct.setOrder(order);
+    orderProduct.setProduct(product);
     orderProduct.setQuantity(request.quantity());
     orderProduct.setPrice(request.price());
 
-    return mapper.toResponse(repository.save(orderProduct));
+    return mapper.toResponse(
+        repository.save(orderProduct)
+    );
   }
 
   @Override
-  public OrderProductResponse actualizar(OrderProductId id, OrderProductRequest request){
+  public OrderProductResponse actualizar(
+      Long orderId,
+      Long productId,
+      OrderProductRequest request
+  ) {
+    OrderProductId id =
+        new OrderProductId(productId, orderId);
+
     OrderProduct orderProduct = repository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Dirección no encontrada"));
+        .orElseThrow(() ->
+            new RuntimeException("Order-Product no encontrado")
+        );
+
     orderProduct.setQuantity(request.quantity());
     orderProduct.setPrice(request.price());
-    return mapper.toResponse(repository.save(orderProduct));
+
+    return mapper.toResponse(
+        repository.save(orderProduct)
+    );
   }
 
   @Override
-  public void eliminar(OrderProductId id){
+  public void eliminar(
+      Long orderId,
+      Long productId
+  ) {
+    OrderProductId id =
+        new OrderProductId(productId, orderId);
+
+    if (!repository.existsById(id)) {
+      throw new RuntimeException("Order-Product no encontrado");
+    }
+
     repository.deleteById(id);
   }
 }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class CollectionMapper {
   public CollectionResponse toResponse(Collection collection) {
     return new CollectionResponse(
-        collection.getId_collection(),
+        collection.getId(),
         collection.getCollection_name(),
         collection.getDescription()
     );

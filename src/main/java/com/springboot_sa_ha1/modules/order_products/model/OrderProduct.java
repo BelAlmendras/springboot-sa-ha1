@@ -16,6 +16,10 @@ public class OrderProduct {
   @EmbeddedId
   private OrderProductId id;
 
+  private Integer quantity;
+
+  private Integer price;
+
   @ManyToOne
   @MapsId("productId")
   @JoinColumn(name = "id_product")
@@ -25,8 +29,4 @@ public class OrderProduct {
   @MapsId("orderId")
   @JoinColumn(name = "id_order")
   private Order order;
-
-  private Integer quantity;
-
-  private Integer price;
 }

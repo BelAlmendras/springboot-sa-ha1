@@ -1,12 +1,14 @@
 package com.springboot_sa_ha1.modules.products.dto;
+import com.springboot_sa_ha1.modules.categories.dto.CategoryResponse;
+import java.util.List;
 
 public record ProductResponse(
-    Long id_product,
-    String product_name,
+    Long id,
+    String name,
     Long price,
     Long stock,
     String description,
-    String imageUrl,
-    Long id_category,
-    Long id_collection
+    List<String> imageUrls,
+    CategoryResponse category
 ) {}
+

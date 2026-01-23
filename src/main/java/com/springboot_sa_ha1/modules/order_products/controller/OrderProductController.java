@@ -2,7 +2,6 @@ package com.springboot_sa_ha1.modules.order_products.controller;
 
 import com.springboot_sa_ha1.modules.order_products.dto.OrderProductRequest;
 import com.springboot_sa_ha1.modules.order_products.dto.OrderProductResponse;
-import com.springboot_sa_ha1.modules.order_products.model.OrderProductId;
 import com.springboot_sa_ha1.modules.order_products.service.OrderProductService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +11,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/order_product")
-//@RequiredArgsConstructor
 public class OrderProductController {
 
   private final OrderProductService orderProductService;
@@ -26,24 +24,40 @@ public class OrderProductController {
     return ResponseEntity.ok(orderProductService.listarTodos());
   }
 
-  @GetMapping("/{id}")
-  public ResponseEntity<OrderProductResponse> obtenerPorId(@PathVariable OrderProductId id) {
-    return ResponseEntity.ok(orderProductService.obtenerPorId(id));
+  @GetMapping("/order/{orderId}/product/{productId}")
+  public ResponseEntity<OrderProductResponse> obtenerPorId(
+      @PathVariable Long orderId,
+      @PathVariable Long productId
+  ) {
+    return ResponseEntity.ok(
+        orderProductService.obtenerPorId(orderId, productId)
+    );
   }
 
   @PostMapping("/create")
-  public ResponseEntity<OrderProductResponse> crear(@Valid @RequestBody OrderProductRequest request) {
+  public ResponseEntity<OrderProductResponse> crear(
+      @Valid @RequestBody OrderProductRequest request
+  ) {
     return ResponseEntity.ok(orderProductService.guardar(request));
   }
 
-  @PutMapping("/{id}")
-  public ResponseEntity<OrderProductResponse> actualizar(@PathVariable OrderProductId id, @Valid @RequestBody OrderProductRequest request) {
-    return ResponseEntity.ok(orderProductService.actualizar(id, request));
+  @PutMapping("/order/{orderId}/product/{productId}")
+  public ResponseEntity<OrderProductResponse> actualizar(
+      @PathVariable Long orderId,
+      @PathVariable Long productId,
+      @Valid @RequestBody OrderProductRequest request
+  ) {
+    return ResponseEntity.ok(
+        orderProductService.actualizar(orderId, productId, request)
+    );
   }
 
-  @DeleteMapping("/{id}")
-  public ResponseEntity<Void> eliminar(@PathVariable OrderProductId id) {
-    orderProductService.eliminar(id);
+  @DeleteMapping("/order/{orderId}/product/{productId}")
+  public ResponseEntity<Void> eliminar(
+      @PathVariable Long orderId,
+      @PathVariable Long productId
+  ) {
+    orderProductService.eliminar(orderId, productId);
     return ResponseEntity.noContent().build();
   }
 }
