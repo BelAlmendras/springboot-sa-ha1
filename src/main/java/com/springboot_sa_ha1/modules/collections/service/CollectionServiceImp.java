@@ -53,10 +53,17 @@ public class CollectionServiceImp implements CollectionService {
 
   @Override
   public CollectionResponse actualizar(Long id, CollectionRequest request){
+    // Generar slug automáticamente
+    String normalizedSlug = request.name()
+        .trim()
+        .toLowerCase()
+        .replace(" ", "_");
     Collection collection = repository.findById(id)
         .orElseThrow(() -> new RuntimeException("Colección no encontrada"));
+    collection.setId(id);
     collection.setName(request.name());
     collection.setDescription(request.description());
+    collection.setSlug(normalizedSlug);
 
     return mapper.toResponse(repository.save(collection));
   }

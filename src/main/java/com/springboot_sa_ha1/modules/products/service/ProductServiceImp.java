@@ -6,6 +6,7 @@ import com.springboot_sa_ha1.modules.collections.dto.CollectionResponse;
 import com.springboot_sa_ha1.modules.collections.model.Collection;
 import com.springboot_sa_ha1.modules.collections.repository.CollectionRepository;
 import com.springboot_sa_ha1.modules.product_collections.model.ProductCollection;
+import com.springboot_sa_ha1.modules.product_collections.model.ProductCollectionId;
 import com.springboot_sa_ha1.modules.productimages.model.ProductImage;
 import com.springboot_sa_ha1.modules.products.dto.ProductRequest;
 import com.springboot_sa_ha1.modules.products.dto.ProductResponse;
@@ -127,7 +128,15 @@ public class ProductServiceImp implements ProductService {
       for (CollectionResponse colResp : request.collections()) {
         Collection collection = collectionRepository.findById(colResp.id())
             .orElseThrow(() -> new RuntimeException("Colección no encontrada: " + colResp.id()));
+
         ProductCollection pc = new ProductCollection();
+
+        // crear ID compuesto
+        ProductCollectionId pcId = new ProductCollectionId();
+        pcId.setProductId(product.getId());
+        pcId.setCollectionId(collection.getId());
+        pc.setId(pcId);
+
         pc.setProduct(product);
         pc.setCollection(collection);
         product.getProductCollections().add(pc);
