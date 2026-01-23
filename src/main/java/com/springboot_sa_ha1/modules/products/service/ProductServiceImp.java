@@ -82,20 +82,39 @@ public class ProductServiceImp implements ProductService {
       }
     }
 
-    // Asociar colecciones
+    // Asociar colecciones con ID compuesto
     if (request.collections() != null && !request.collections().isEmpty()) {
       for (CollectionResponse colResp : request.collections()) {
         Collection collection = collectionRepository.findById(colResp.id())
             .orElseThrow(() -> new RuntimeException("Colección no encontrada: " + colResp.id()));
+
         ProductCollection pc = new ProductCollection();
+
+        // Crear ID compuesto
+        ProductCollectionId pcId = new ProductCollectionId();
+        // Como el producto aún no tiene ID, se asignará luego de guardar
+        pcId.setCollectionId(collection.getId());
+        pc.setId(pcId);
+
         pc.setProduct(product);
         pc.setCollection(collection);
         product.getProductCollections().add(pc);
       }
     }
 
-    return mapper.toResponse(productRepository.save(product));
+    // Guardar primero para generar ID del producto
+    Product savedProduct = productRepository.save(product);
+
+    // Asignar los ProductCollectionId ahora que el producto tiene ID
+    for (ProductCollection pc : savedProduct.getProductCollections()) {
+      ProductCollectionId pcId = pc.getId();
+      pcId.setProductId(savedProduct.getId());
+      pc.setId(pcId);
+    }
+
+    return mapper.toResponse(savedProduct);
   }
+
 
   @Override
   public ProductResponse actualizar(Long id, ProductRequest request) {
@@ -120,6 +139,7 @@ public class ProductServiceImp implements ProductService {
         image.setProduct(product);
         product.getImages().add(image);
       }
+
     }
 
     // Limpiar y agregar nuevas colecciones

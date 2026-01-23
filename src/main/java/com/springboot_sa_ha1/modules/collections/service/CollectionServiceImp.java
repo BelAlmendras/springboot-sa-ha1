@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class CollectionServiceImp implements CollectionService {
-  //private final CollectionRepository collectionRepository;
 
   private final CollectionRepository repository;
   private final CollectionMapper mapper;
@@ -48,6 +47,8 @@ public class CollectionServiceImp implements CollectionService {
     collection.setName(request.name());
     collection.setDescription(request.description());
     collection.setSlug(normalizedSlug);
+    collection.setImage(request.image());
+
     return mapper.toResponse(repository.save(collection));
   }
 
@@ -64,6 +65,7 @@ public class CollectionServiceImp implements CollectionService {
     collection.setName(request.name());
     collection.setDescription(request.description());
     collection.setSlug(normalizedSlug);
+    collection.setImage(request.image());
 
     return mapper.toResponse(repository.save(collection));
   }

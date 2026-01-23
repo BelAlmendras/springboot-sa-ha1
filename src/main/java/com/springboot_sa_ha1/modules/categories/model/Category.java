@@ -25,6 +25,8 @@ public class Category {
 
   private String slug;
 
+  private String image;
+
   @OneToMany(mappedBy = "category")
   private List<Product> products;
 }

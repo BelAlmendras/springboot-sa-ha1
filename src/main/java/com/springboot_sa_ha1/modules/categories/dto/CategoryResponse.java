@@ -4,5 +4,6 @@ public record CategoryResponse(
     Long id,
     String name,
     String description,
-    String slug
+    String slug,
+    String image
 ) {}

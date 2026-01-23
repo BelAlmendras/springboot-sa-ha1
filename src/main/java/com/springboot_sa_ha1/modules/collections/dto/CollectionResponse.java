@@ -4,6 +4,6 @@ public record CollectionResponse (
     Long id,
     String name,
     String description,
-    String slug
-
+    String slug,
+    String image
 ){}

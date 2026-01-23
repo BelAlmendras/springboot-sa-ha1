@@ -28,6 +28,8 @@ public class Collection {
 
   private String slug;
 
+  private String image;
+
   @OneToMany(mappedBy = "collection", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<ProductCollection> productCollections = new HashSet<>();
 }

@@ -48,6 +48,7 @@ public class CategoryServiceImp implements CategoryService {
     category.setName(request.name());
     category.setDescription(request.description());
     category.setSlug(normalizedSlug);
+    category.setImage(request.image());
     return mapper.toResponse(repository.save(category));
   }
 
@@ -57,6 +58,7 @@ public class CategoryServiceImp implements CategoryService {
         .orElseThrow(() -> new RuntimeException("Colección no encontrada"));
     category.setName(request.name());
     category.setDescription(request.description());
+    category.setImage(request.image());
 
     return mapper.toResponse(repository.save(category));
   }

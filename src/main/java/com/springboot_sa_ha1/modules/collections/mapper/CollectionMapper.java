@@ -13,7 +13,8 @@ public class CollectionMapper {
         collection.getId(),
         collection.getName(),
         collection.getDescription(),
-        collection.getSlug()
+        collection.getSlug(),
+        collection.getImage()
     );
   }
 }
