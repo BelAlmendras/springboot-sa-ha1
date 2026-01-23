@@ -10,8 +10,8 @@ public class CategoryMapper {
     return new CategoryResponse(
         category.getId_category(),
         category.getCategory_name(),
-        category.getDescription(),
-        category.getSlug()
+        category.getSlug(),
+        category.getDescription()
     );
   }
 }
