@@ -74,3 +74,14 @@ CREATE TABLE IF NOT EXISTS product_collections (
     FOREIGN KEY (id_collection)
     REFERENCES collections (id_collection)
     );
+
+DROP TABLE IF EXISTS contacts;
+
+CREATE TABLE contacts (
+id SERIAL PRIMARY KEY,
+name VARCHAR(200) NOT NULL,
+email VARCHAR(255) NOT NULL,
+phone VARCHAR(20),
+message TEXT NOT NULL,
+created_at TIMESTAMP DEFAULT NOW()
+);

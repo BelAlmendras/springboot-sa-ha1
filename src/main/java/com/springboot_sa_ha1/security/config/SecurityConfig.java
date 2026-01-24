@@ -27,7 +27,9 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
+
                 .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/api/contact/**").permitAll()
                 .requestMatchers("/usuarios/**").permitAll()
                 .requestMatchers("/api/**").permitAll()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**", "/openapi.yaml").permitAll()
