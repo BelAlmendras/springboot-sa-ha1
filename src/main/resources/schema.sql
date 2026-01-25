@@ -84,3 +84,52 @@ email VARCHAR(255) NOT NULL,
 phone VARCHAR(20),
 message TEXT NOT NULL,
 );
+
+
+-- 1. Crear la tabla cart_products
+-- CORREGIR la FK para customer_id (apunta a id_customer en clientes)
+CREATE TABLE cart_products (
+id BIGSERIAL PRIMARY KEY,
+customer_id BIGINT NOT NULL,
+product_id BIGINT NOT NULL,
+quantity INTEGER NOT NULL DEFAULT 1,
+added_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+
+    -- Restricciones
+CONSTRAINT fk_cart_products_customer
+   FOREIGN KEY (customer_id)
+       REFERENCES clientes(id_customer) ON DELETE CASCADE,
+
+CONSTRAINT fk_cart_products_product
+   FOREIGN KEY (product_id)
+       REFERENCES productos(id) ON DELETE CASCADE,
+
+CONSTRAINT unique_customer_product
+   UNIQUE (customer_id, product_id),
+
+CONSTRAINT check_quantity_positive
+   CHECK (quantity > 0)
+);
+
+-- 2. Crear índices para mejor performance
+CREATE INDEX idx_cart_products_customer ON cart_products(customer_id);
+CREATE INDEX idx_cart_products_product ON cart_products(product_id);
+
+-- 3. (Opcional) Trigger para actualizar updated_at automáticamente
+CREATE OR REPLACE FUNCTION update_cart_products_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = NOW();
+RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_update_cart_products_updated_at
+    BEFORE UPDATE ON cart_products
+    FOR EACH ROW
+    EXECUTE FUNCTION update_cart_products_updated_at();
+
+-- 4. Verificar que se creó correctamente
+COMMENT ON TABLE cart_products IS 'Productos en el carrito de compra de los clientes';
+COMMENT ON COLUMN cart_products.quantity IS 'Cantidad del producto en el carrito (debe ser > 0)';
