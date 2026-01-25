@@ -23,20 +23,32 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .cors(cors -> {}) // 👈 MUY IMPORTANTE
-            .csrf(csrf -> csrf.disable())
-            .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
+                .cors(cors -> {})
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        // Públicos
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/api/contact/**").permitAll()
+                        .requestMatchers("/usuarios/**").permitAll()
 
-                .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/api/contact/**").permitAll()
-                .requestMatchers("/usuarios/**").permitAll()
-                .requestMatchers("/api/**").permitAll()
-                .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**", "/openapi.yaml").permitAll()
-                .requestMatchers(HttpMethod.GET, "/actuator/health").permitAll()
-                .anyRequest().authenticated()
-            )
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                        // Documentación
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui.html",
+                                "/swagger-ui/**", "/openapi.yaml").permitAll()
+
+                        // Health check
+                        .requestMatchers(HttpMethod.GET, "/actuator/health").permitAll()
+
+                        // CARRITO - requiere autenticación
+                        .requestMatchers("/api/cart/**").authenticated()
+
+                        // Otros endpoints API (públicos por ahora)
+                        .requestMatchers("/api/**").permitAll()
+
+                        // Cualquier otra cosa requiere autenticación
+                        .anyRequest().authenticated()
+                )
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
