@@ -68,6 +68,8 @@ public class CustomerServiceImp implements CustomerService {
         repository.deleteById(id);
     }
 
+
+    /*
     private CustomerResponse toResponse(Customer customer){
         return new CustomerResponse(
                 customer.getId(),
@@ -76,6 +78,8 @@ public class CustomerServiceImp implements CustomerService {
                 customer.getPasswordHash()
         );
     }
+    */
+
     /*
     @Override
     public List<Customer> listarTodos(){

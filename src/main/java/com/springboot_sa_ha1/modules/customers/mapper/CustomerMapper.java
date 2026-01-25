@@ -5,12 +5,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CustomerMapper {
-  public CustomerResponse toResponse(Customer customer) {
-    return new CustomerResponse(
-        customer.getId(),
-        customer.getName(),
-        customer.getEmail(),
-        customer.getPhone()
-    );
-  }
+    public CustomerResponse toResponse(Customer customer) {
+        return new CustomerResponse(
+                customer.getId(),
+                customer.getName(),
+                customer.getEmail(),
+                customer.getPhone(),
+                customer.getRol().name()
+        );
+    }
 }
