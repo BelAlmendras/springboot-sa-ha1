@@ -29,10 +29,11 @@ public class AuthController {
 
     @PutMapping("/user/{id}")
     public ResponseEntity<AuthResponse> updateUser(
-        @PathVariable Long id,
-        @RequestBody UpdateUserRequest req
+            @PathVariable Long id,
+            @RequestBody UpdateUserRequest req
     ) {
-        AuthResponse updated = authService.updateUser(id, req.name(), req.email(), req.rol(), req.active());
+        // Agrega req.phone() al método updateUser
+        AuthResponse updated = authService.updateUser(id, req.name(), req.email(), req.phone(), req.rol(), req.active());
         return ResponseEntity.ok(updated);
     }
 
