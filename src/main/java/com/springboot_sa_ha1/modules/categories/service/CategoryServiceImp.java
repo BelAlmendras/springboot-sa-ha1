@@ -41,10 +41,12 @@ public class CategoryServiceImp implements CategoryService {
         .orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
   }
 
+  @Override
   public List<CategoryWithProductsResponse> listarCategoriasConProductosPorSlug(List<String> slugs) {
 
     // Normalización de slugs
     List<String> normalizedSlugs = slugs.stream()
+        .filter(Objects::nonNull)
         .map(String::toLowerCase)
         .map(String::trim)
         .map(s -> s.replace("-", "_"))
@@ -55,23 +57,45 @@ public class CategoryServiceImp implements CategoryService {
 
     // Mapear a DTO
     return categories.stream()
-        .map(c -> new CategoryWithProductsResponse(
-            c.getId(),
-            c.getName(),
-            c.getDescription(),
-            c.getSlug(),
-            c.getImage(),
-            c.getProducts().stream()   // List<Product> directo de Category
-                .map(p -> new ProductResponse(
+        .filter(Objects::nonNull)
+        .map(c -> {
+          List<ProductResponse> products = c.getProducts().stream()
+              .filter(Objects::nonNull)
+              .map(p -> {
+                // Lista de URLs de imágenes
+                List<String> imageUrls = (p.getImages() != null)
+                    ? p.getImages().stream()
+                    .filter(Objects::nonNull)
+                    .map(ProductImage::getImageUrl)
+                    .filter(Objects::nonNull)
+                    .toList()
+                    : List.of();
+
+                // Lista de colecciones
+                List<CollectionResponse> collections = (p.getProductCollections() != null)
+                    ? p.getProductCollections().stream()
+                    .filter(Objects::nonNull)
+                    .map(pc -> {
+                      var col = pc.getCollection();
+                      return new CollectionResponse(
+                          col.getId(),
+                          col.getName(),
+                          col.getDescription(),
+                          col.getSlug(),
+                          col.getImage()
+                      );
+                    })
+                    .toList()
+                    : List.of();
+
+                // DTO del producto
+                return new ProductResponse(
                     p.getId(),
                     p.getName(),
                     p.getPrice(),
                     p.getStock(),
                     p.getDescription(),
-                    p.getImages().stream()
-                        .map(ProductImage::getImageUrl)
-                        .filter(Objects::nonNull)
-                        .toList(),
+                    imageUrls,
                     new CategoryResponse(
                         c.getId(),
                         c.getName(),
@@ -79,21 +103,22 @@ public class CategoryServiceImp implements CategoryService {
                         c.getSlug(),
                         c.getImage()
                     ),
-                    p.getProductCollections().stream()
-                        .map(col -> new CollectionResponse(
-                            col.getCollection().getId(),
-                            col.getCollection().getName(),
-                            col.getCollection().getDescription(),
-                            col.getCollection().getSlug(),
-                            col.getCollection().getImage()
-                        ))
-                        .toList()
-                ))
-                .toList()
-        ))
+                    collections
+                );
+              })
+              .toList();
+
+          return new CategoryWithProductsResponse(
+              c.getId(),
+              c.getName(),
+              c.getDescription(),
+              c.getSlug(),
+              c.getImage(),
+              products
+          );
+        })
         .toList();
   }
-
 
   @Override
   public CategoryResponse guardar(CategoryRequest request){

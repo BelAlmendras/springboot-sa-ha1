@@ -8,13 +8,13 @@ import com.springboot_sa_ha1.modules.collections.mapper.CollectionMapper;
 import com.springboot_sa_ha1.modules.collections.model.Collection;
 import com.springboot_sa_ha1.modules.collections.repository.CollectionRepository;
 import com.springboot_sa_ha1.modules.collections.service.CollectionService;
+import com.springboot_sa_ha1.modules.product_collections.model.ProductCollection;
 import com.springboot_sa_ha1.modules.products.dto.ProductResponse;
 import com.springboot_sa_ha1.modules.products.model.Product;
 import org.springframework.stereotype.Service;
 import com.springboot_sa_ha1.modules.productimages.model.ProductImage;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -66,65 +66,89 @@ public class CollectionServiceImp implements CollectionService {
   }
 
 
+  @Override
   public List<CollectionWithProductsResponse> listarColeccionesConProductosPorSlug(List<String> slugs) {
 
-    // ✅ Normalización de slugs (problema real ya identificado)
+    if (slugs == null || slugs.isEmpty()) return Collections.emptyList();
+
     List<String> normalizedSlugs = slugs.stream()
-        .map(String::toLowerCase)
+        .filter(Objects::nonNull)
         .map(String::trim)
+        .map(String::toLowerCase)
         .map(s -> s.replace("-", "_"))
         .toList();
 
-    List<Collection> collections =
-        repository.findAllBySlugsWithProducts(normalizedSlugs);
+    List<Collection> collections = repository.findAllBySlugsWithProducts(normalizedSlugs);
+    if (collections == null || collections.isEmpty()) return Collections.emptyList();
 
-    return collections.stream()
-        .map(c -> new CollectionWithProductsResponse(
-            c.getId(),
-            c.getName(),
-            c.getDescription(),
-            c.getSlug(),
-            c.getImage(),
-            c.getProductCollections().stream()
-                .map(pc -> {
-                  Product p = pc.getProduct();
+    List<CollectionWithProductsResponse> result = new ArrayList<>();
 
-                  return new ProductResponse(
-                      p.getId(),
-                      p.getName(),
-                      p.getPrice(),
-                      p.getStock(),
-                      p.getDescription(),
-                      p.getImages().stream()
-                          .map(ProductImage::getImageUrl)
-                          .filter(Objects::nonNull)
-                          .toList(),
-                      p.getCategory() != null
-                          ? new CategoryResponse(
-                          p.getCategory().getId(),
-                          p.getCategory().getName(),
-                          p.getCategory().getDescription(),
-                          p.getCategory().getSlug(),
-                          p.getCategory().getImage()
-                      )
-                          : null,
-                      p.getProductCollections().stream()
-                          .map(col -> new CollectionResponse(
-                              col.getCollection().getId(),
-                              col.getCollection().getName(),
-                              col.getCollection().getDescription(),
-                              col.getCollection().getSlug(),
-                              col.getCollection().getImage()
-                          ))
-                          .toList()
-                  );
-                })
-                .toList()
-        ))
-        .toList();
+    for (Collection c : collections) {
+      if (c == null) continue;
+
+      Set<ProductCollection> pcs = (c.getProductCollections() != null) ? c.getProductCollections() : Collections.emptySet();
+      List<ProductResponse> products = new ArrayList<>();
+
+      for (ProductCollection pc : pcs) {
+        if (pc == null) continue;
+        Product p = pc.getProduct();
+        if (p == null) continue;
+
+        List<ProductImage> images = (p.getImages() != null) ? p.getImages() : Collections.emptyList();
+        List<String> imageUrls = new ArrayList<>();
+        for (ProductImage img : images) {
+          if (img != null && img.getImageUrl() != null) imageUrls.add(img.getImageUrl());
+        }
+
+        CategoryResponse categoryResponse = null;
+        if (p.getCategory() != null) {
+          categoryResponse = new CategoryResponse(
+              p.getCategory().getId(),
+              p.getCategory().getName(),
+              p.getCategory().getDescription(),
+              p.getCategory().getSlug(),
+              p.getCategory().getImage()
+          );
+        }
+
+        Set<ProductCollection> innerPcs = (p.getProductCollections() != null) ? p.getProductCollections() : Collections.emptySet();
+        List<CollectionResponse> internalCollections = new ArrayList<>();
+        for (ProductCollection innerPc : innerPcs) {
+          if (innerPc == null || innerPc.getCollection() == null) continue;
+          Collection col = innerPc.getCollection();
+          internalCollections.add(new CollectionResponse(
+              col.getId(),
+              col.getName(),
+              col.getDescription(),
+              col.getSlug(),
+              col.getImage()
+          ));
+        }
+
+        products.add(new ProductResponse(
+            p.getId(),
+            p.getName(),
+            p.getPrice(),
+            p.getStock(),
+            p.getDescription(),
+            imageUrls,
+            categoryResponse,
+            internalCollections
+        ));
+      }
+
+      result.add(new CollectionWithProductsResponse(
+          c.getId(),
+          c.getName(),
+          c.getDescription(),
+          c.getSlug(),
+          c.getImage(),
+          products
+      ));
+    }
+
+    return result;
   }
-
-
 
 
   @Override

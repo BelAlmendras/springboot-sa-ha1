@@ -11,7 +11,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -37,19 +39,20 @@ public class Product {
   @Column(nullable = false)
   private String description;
 
+  // 🔹 List en lugar de Set para mantener orden
   @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<ProductImage> images = new HashSet<>();
+  @OrderColumn(name = "position") // respeta el orden de la lista
+  private List<ProductImage> images = new ArrayList<>();
 
   @ManyToOne(optional = false)
   @JoinColumn(name = "id_category", nullable = false)
   private Category category;
 
+  // 🔹 Quitar @Column, Set está bien aquí
   @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-  @Column(name = "product_collections")
   private Set<ProductCollection> productCollections = new HashSet<>();
 
   @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-  @Column(name = "order_products")
   private Set<OrderProduct> orderProducts = new HashSet<>();
 }
 
