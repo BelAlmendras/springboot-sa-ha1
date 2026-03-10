@@ -33,13 +33,13 @@ public class CollectionController {
   }
 
   @GetMapping("/filtered-without-product")
-  public List<CollectionResponse> obtenerColeccionesPorSlug(@RequestParam List<String> slugs) {
-    return collectionService.obtenerColeccionesPorSlug(slugs);
+  public List<CollectionResponse> listarColeccionesPorSlug(@RequestParam List<String> slugs) {
+    return collectionService.listarColeccionesPorSlug(slugs);
   }
 
   @GetMapping("/filtered-with-product")
-  public List<CollectionWithProductsResponse> obtenerColeccionesConProductoPorSlug(@RequestParam List<String> slugs) {
-    return collectionService.obtenerColeccionesConProductoPorSlug(slugs);
+  public List<CollectionWithProductsResponse> listarColeccionesConProductosPorSlug(@RequestParam List<String> slugs) {
+    return collectionService.listarColeccionesConProductosPorSlug(slugs);
   }
 
 

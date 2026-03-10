@@ -23,6 +23,11 @@ public class ProductController {
     this.productService = productService;
   }
 
+  @GetMapping
+  public ResponseEntity<List<ProductResponse>> listar() {
+    return ResponseEntity.ok(productService.listarTodos());
+  }
+
   @GetMapping("/search")
   public ResponseEntity<List<ProductResponse>> searchProducts(@RequestParam String term) {
     return ResponseEntity.ok(productService.searchByTerm(term));
@@ -44,10 +49,6 @@ public class ProductController {
     return productService.listarPorColeccionSlug(slug);
   }
 
-  @GetMapping
-  public ResponseEntity<List<ProductResponse>> listar() {
-    return ResponseEntity.ok(productService.listarTodos());
-  }
 
   @GetMapping("/{id}")
   public ResponseEntity<ProductResponse> obtenerPorId(@PathVariable Long id) {

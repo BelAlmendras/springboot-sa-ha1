@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface CollectionService {
   List<CollectionResponse> listarTodos();
-  List<CollectionResponse> obtenerColeccionesPorSlug(List<String> slugs);
-  List<CollectionWithProductsResponse> obtenerColeccionesConProductoPorSlug(List<String> slugs);
+  List<CollectionResponse> listarColeccionesPorSlug(List<String> slugs);
+  List<CollectionWithProductsResponse> listarColeccionesConProductosPorSlug(List<String> slugs);
   CollectionResponse obtenerPorId(Long id);
   CollectionResponse guardar(CollectionRequest request);
   CollectionResponse actualizar(Long id, CollectionRequest request);
